@@ -3,7 +3,23 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+import axios from "axios";
+const topCard = document.querySelector(".card");
 
+const getPromise = () => {
+  axios
+    .get("https://api.github.com/users/johnyoun28")
+
+    .then((res) => {
+      console.log(res);
+      const resData = res.data;
+      topCard.appendChild(createCard(resData));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+getPromise();
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -49,6 +65,47 @@ const followersArray = [];
       </div>
     </div>
 */
+//CREATE ELEMENTS
+function createCard(objects) {
+  const card = document.createElement("div");
+  card.classList.add("card");
+  const image = document.createElement("img");
+  const info = document.createElement("div");
+  info.classList.add("card-info");
+  const name = document.createElement("h3");
+  name.classList.add("name");
+  const username = document.createElement("p");
+  username.classList.add("username");
+  const location = document.createElement("p");
+  const profile = document.createElement("p");
+  const href = document.createElement("a");
+  const followers = document.createElement("p");
+  const following = document.createElement("p");
+  const bio = document.createElement("p");
+
+  //APEND
+  card.appendChild(image);
+  card.appendChild(info);
+  card.appendChild(name);
+  card.appendChild(username);
+  card.appendChild(location);
+  card.appendChild(profile);
+  card.appendChild(href);
+  card.appendChild(followers);
+  card.appendChild(following);
+  card.appendChild(bio);
+
+  name.textContent = objects.name;
+  username.textContent = objects.login;
+  image.src = objects.avatar_url;
+  bio.textContent = objects.bio;
+  location.textContent = objects.logcation;
+  followers.textContent = `Followers: ${objects.followers}`;
+  following.textContent = `Following: ${objects.following}`;
+  href.textContent = objects.html_url;
+
+  return card;
+}
 
 /*
   List of LS Instructors Github username's:
