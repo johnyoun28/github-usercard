@@ -4,7 +4,7 @@
     https://api.github.com/users/<your name>
 */
 import axios from "axios";
-const topCard = document.querySelector(".card");
+const topCard = document.querySelector(".cards");
 
 const getPromise = () => {
   axios
@@ -12,8 +12,11 @@ const getPromise = () => {
 
     .then((res) => {
       console.log(res);
-      const resData = res.data;
-      topCard.appendChild(createCard(resData));
+      const resData = createCard(res.data);
+      topCard.appendChild(resData);
+      // res.data.forEach((item) => {
+      //   topCard.append(createCard(item.data));
+      // });
     })
     .catch((error) => {
       console.log(error);
@@ -44,7 +47,19 @@ getPromise();
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "tetondan",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell",
+];
+
+followersArray.forEach((item) => {
+  axios.get(`https://api.github.com/users/${item}`).then((res) => {
+    topCard.appendChild(createCard(res.data));
+  });
+});
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -86,20 +101,19 @@ function createCard(objects) {
   //APEND
   card.appendChild(image);
   card.appendChild(info);
-  card.appendChild(name);
-  card.appendChild(username);
-  card.appendChild(location);
-  card.appendChild(profile);
-  card.appendChild(href);
-  card.appendChild(followers);
-  card.appendChild(following);
-  card.appendChild(bio);
+  info.appendChild(name);
+  info.appendChild(username);
+  info.appendChild(location);
+  info.appendChild(profile);
+  info.appendChild(followers);
+  info.appendChild(following);
+  info.appendChild(bio);
 
   name.textContent = objects.name;
   username.textContent = objects.login;
   image.src = objects.avatar_url;
   bio.textContent = objects.bio;
-  location.textContent = objects.logcation;
+  location.textContent = objects.location;
   followers.textContent = `Followers: ${objects.followers}`;
   following.textContent = `Following: ${objects.following}`;
   href.textContent = objects.html_url;
